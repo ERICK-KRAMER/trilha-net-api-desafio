@@ -1,6 +1,8 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using TrilhaApiDesafio.Context;
+using TrilhaApiDesafio.Repositories;
+using TrilhaApiDesafio.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,8 @@ builder.Services.AddDbContext<OrganizadorContext>(options =>
 
 builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+builder.Services.AddScoped<ITarefaRepository, TarefaRepository>();
 
 
 builder.Services.AddEndpointsApiExplorer();

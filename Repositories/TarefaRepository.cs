@@ -24,7 +24,6 @@ namespace TrilhaApiDesafio.Repositories
             await _dbContext.SaveChangesAsync();
             return tarefaAlreadyExist;
         }
-
         public async Task<(string message, Tarefa tarefa)> Criar(Tarefa tarefa)
         {
             await _dbContext.Tarefas.AddAsync(tarefa);
@@ -32,34 +31,47 @@ namespace TrilhaApiDesafio.Repositories
             return (message: "Tareafa criada com sucesso!", tarefa);
         }
 
+        public async Task<(string message, Tarefa tarefa)> Deletar(int id)
+        {
+            Tarefa tarefa = await _dbContext.Tarefas.FirstOrDefaultAsync(x => x.Id == id) ?? throw new Exception("Not found!");
+            _dbContext.Tarefas.Remove(tarefa);
+            await _dbContext.SaveChangesAsync();
+            return (message: "Tarefa deletada com sucesso!", tarefa);
+        }
+
         public async Task<Tarefa> ObterPorData(DateTime data)
         {
-            Tarefa tarefa = await _dbContext.Tarefas.FirstOrDefaultAsync(x => x.Data == data);
+            Tarefa tarefa = await _dbContext.Tarefas.FirstOrDefaultAsync(x => x.Data == data) ?? throw new Exception("Not found!");
             return tarefa;
         }
 
         public async Task<Tarefa> ObterPorId(int id)
         {
-            Tarefa findTarefa = await _dbContext.Tarefas.FirstOrDefaultAsync(x => x.Id == id);
+            Tarefa findTarefa = await _dbContext.Tarefas.FirstOrDefaultAsync(x => x.Id == id) ?? throw new Exception("Not found!");
             return findTarefa;
         }
 
-        public async Task<Tarefa> ObterPorStatus(EnumStatusTarefa status)
+        public async Task<List<Tarefa>> ObterPorStatus(EnumStatusTarefa status)
         {
-            Tarefa tarefa = await _dbContext.Tarefas.FirstOrDefaultAsync(x => x.Status == status);
-            return tarefa;
+            List<Tarefa> tarefas = await _dbContext.Tarefas
+                .Where(x => x.Status == status)
+                .ToListAsync() ?? throw new Exception("Not found!");
+            return tarefas;
         }
+
 
         public async Task<Tarefa> ObterPorTitulo(string titulo)
         {
-            Tarefa tarefa = await _dbContext.Tarefas.FirstOrDefaultAsync(x => x.Titulo == titulo);
+            Tarefa tarefa = await _dbContext.Tarefas.FirstOrDefaultAsync(x => x.Titulo == titulo) ?? throw new Exception("Not found!");
             return tarefa;
         }
 
         public async Task<List<Tarefa>> ObterTodos()
         {
-            List<Tarefa> tarefas = await _dbContext.Tarefas.ToListAsync();
+            List<Tarefa> tarefas = await _dbContext.Tarefas.ToListAsync()
+                ?? throw new Exception("Not Found!");
             return tarefas;
         }
+
     }
 }

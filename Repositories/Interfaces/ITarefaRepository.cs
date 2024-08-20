@@ -8,8 +8,9 @@ namespace TrilhaApiDesafio.Repositories.Interfaces
         Task<List<Tarefa>> ObterTodos();
         Task<Tarefa> ObterPorTitulo(string titulo);
         Task<Tarefa> ObterPorData(DateTime data);
-        Task<Tarefa> ObterPorStatus(EnumStatusTarefa status);
+        Task<List<Tarefa>> ObterPorStatus(EnumStatusTarefa status);
         Task<(string message, Tarefa tarefa)> Criar(Tarefa tarefa);
         Task<Tarefa> Atualizar(int id, Tarefa tarefa);
+        Task<(string message, Tarefa tarefa)> Deletar(int id);
     }
 }
